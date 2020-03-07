@@ -1,0 +1,44 @@
+{{/* ! + TAB - базовая структура HTML */}}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {{/* .Title - вывод данных */}}
+    <title>{{.Title}}</title>
+</head>
+<body>
+{{/* emmet */}}
+{{/* ! + Tab - структура */}}
+{{/* tag + Tab - разворачивает tag */}}
+{{/* tag{} + Tab - разворачивает tag + внутрь подставляет контент */}}
+<h1>{{.Title}}</h1>
+{{/* CREATE, READ, UPDATE, DELETE */}}
+
+{{/* form>input+button */}}
+<form action="/burgers/save" method="POST">
+    <input type="hidden" name="action" value="save">
+    <input type="text" name="name">
+    <input type="number" name="price">
+    <textarea name="description"></textarea>
+    <button>Ok</button>
+</form>
+
+<ul>
+    {{/* for index, val := range data.Burgers { }*/}}
+    {{range $index, $val := .Burgers}}
+    <li>
+        {{$index}} {{$val}}
+        <form action="/burgers/remove" method="POST">
+            <input type="hidden" name="action" value="remove">
+            <input type="hidden" name="id" value="{{$val.Id}}">
+            <button>Remove</button>
+        </form>
+    </li>
+    {{end}}
+</ul>
+
+</body>
+</html>
