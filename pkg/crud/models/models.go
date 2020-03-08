@@ -6,6 +6,7 @@ type Burger struct {
 	Id int64
 	Name string
 	Price int
+	Description string
 	Removed bool
 }
 

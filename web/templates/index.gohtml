@@ -8,37 +8,42 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {{/* .Title - вывод данных */}}
     <title>{{.Title}}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
 {{/* emmet */}}
 {{/* ! + Tab - структура */}}
 {{/* tag + Tab - разворачивает tag */}}
 {{/* tag{} + Tab - разворачивает tag + внутрь подставляет контент */}}
-<h1>{{.Title}}</h1>
+<h1 style="color: darkblue">{{.Title}}</h1>
 {{/* CREATE, READ, UPDATE, DELETE */}}
 
 {{/* form>input+button */}}
-<form action="/burgers/save" method="POST">
+<form action="/burgers/save" method="POST" class="m-3" style="width: 400px">
     <input type="hidden" name="action" value="save">
-    <input type="text" name="name">
-    <input type="number" name="price">
-    <textarea name="description"></textarea>
-    <button>Ok</button>
+    <input type="text" name="name" class="form-control mt-3" placeholder="Название бургера" required>
+    <input type="number" name="price" class="form-control mt-3" placeholder="Цена" required>
+    <textarea name="description" class="form-control mt-3" placeholder="Описание..." required></textarea>
+    <button class="btn btn-outline-info mt-3" >Добавить</button>
 </form>
 
 <ul>
     {{/* for index, val := range data.Burgers { }*/}}
     {{range $index, $val := .Burgers}}
-    <li>
-        {{$index}} {{$val}}
+    <li style="color: goldenrod">
+         {{$val.Name}}<br>
+         {{$val.Price}} р<br>
+         {{$val.Description}}
         <form action="/burgers/remove" method="POST">
             <input type="hidden" name="action" value="remove">
             <input type="hidden" name="id" value="{{$val.Id}}">
-            <button>Remove</button>
+            <button class="btn btn-outline-danger">Удалить</button>
         </form>
     </li>
     {{end}}
 </ul>
-
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 </html>

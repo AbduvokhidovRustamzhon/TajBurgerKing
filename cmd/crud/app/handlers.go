@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"strconv"
 )
 
 //func (receiver *server) handleBurgersList() func(writer http.ResponseWriter, request *http.Request) {
@@ -114,7 +115,7 @@ func (receiver *server) handleBurgersList() func(http.ResponseWriter, *http.Requ
 			Title string
 			Burgers []models.Burger
 		}{
-			Title: "McDonalds",
+			Title: "TajBurgersKing",
 			Burgers: list,
 		}
 
@@ -128,11 +129,26 @@ func (receiver *server) handleBurgersList() func(http.ResponseWriter, *http.Requ
 }
 
 func (receiver *server) handleBurgersSave() func(responseWriter http.ResponseWriter, request *http.Request) {
-	// POST
 	return func(writer http.ResponseWriter, request *http.Request) {
-		// TODO: save data in db
 
-		// TODO: посмотреть, можно ли переделать на GET
+		name := request.FormValue("name")
+		price := request.FormValue("price")
+		description := request.FormValue("description")
+
+		parsedPrice, err := strconv.Atoi(price)
+		if err != nil {
+			log.Printf("incorect data from request: %v", err)
+			http.Error(writer, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+			return
+		}
+
+		err = receiver.burgersSvc.Save(models.Burger{Name: name, Price: parsedPrice, Description: description})
+		if err != nil {
+			log.Printf("error while saving burger: %v", err)
+			http.Error(writer, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+			return
+		}
+
 		http.Redirect(writer, request, "/", http.StatusPermanentRedirect)
 		return
 	}
@@ -142,7 +158,24 @@ func (receiver *server) handleBurgersRemove() func(responseWriter http.ResponseW
 	// POST
 	return func(writer http.ResponseWriter, request *http.Request) {
 		// TODO: update removed = true in db
+		id := request.FormValue("id")
+
+		parsedId, err := strconv.Atoi(id)
+		if err != nil {
+			log.Printf("incorect data from request: %v", err)
+			http.Error(writer, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+			return
+		}
+
 		// TODO: посмотреть, можно ли переделать на GET
+
+		err = receiver.burgersSvc.RemoveById(int64(parsedId))
+		if err != nil {
+			log.Printf("error while removing burger: %v", err)
+			http.Error(writer, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+			return
+		}
+
 		http.Redirect(writer, request, "/", http.StatusPermanentRedirect)
 		return
 	}
